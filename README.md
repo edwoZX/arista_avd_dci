@@ -1,0 +1,19 @@
+# group_vars usage
+
+<FABRIC.yml>
+
+<DC1_FABRIC.yml>
+<DC2_FABRIC.yml>
+
+<EVPN_SERVICES_DC1.yml>
+<EVPN_SERVICES_DC2.yml>
+
+<DC1_BORDER_LEAFS.yml>
+<DC2_BORDER_LEAFS.yml>
+
+<CONNECTED_SERVERS_DC1.yml>
+<CONNECTED_SERVERS_DC2.yml>
+
+
+
+
