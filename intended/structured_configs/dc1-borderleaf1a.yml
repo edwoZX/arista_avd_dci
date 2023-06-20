@@ -421,11 +421,6 @@ router_bfd:
 ip_igmp_snooping:
   globally_enabled: true
 ip_virtual_router_mac_address: 00:1c:73:00:00:10
-eos_cli: 'route-target export evpn route-map RM_LEAK_ROUTES_A_DC1
-
-  route-target export evpn route-map RM_LEAK_ROUTES_B_DC1
-
-  route-target export evpn route-map RM_LEAK_ROUTES_C_DC1'
 vxlan_interface:
   Vxlan1:
     description: dc1-borderleaf1a_VTEP

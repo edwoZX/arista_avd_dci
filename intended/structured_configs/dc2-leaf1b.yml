@@ -379,24 +379,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-- name: RM_LEAK_ROUTES_C_DC2
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_C_DC2
-- name: RM_LEAK_ROUTES_B_DC2
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_B_DC2
-- name: RM_LEAK_ROUTES_A_DC2
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_A_DC2
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -413,18 +395,6 @@ prefix_lists:
     action: permit 3.3.3.0/27 eq 32
   - sequence: 20
     action: permit 4.4.4.0/27 eq 32
-- name: PL_LEAK_ROUTES_C_DC2
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.220.0.0/24
-- name: PL_LEAK_ROUTES_B_DC2
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.210.0.0/24
-- name: PL_LEAK_ROUTES_A_DC2
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.200.0.0/24
 router_bfd:
   multihop:
     interval: 1200

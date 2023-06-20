@@ -25,7 +25,6 @@ tenants:
           - type: import
             address_family: evpn
             route_target: "120:120"
-        raw_eos_cli: "route-target export evpn route-map RM_LEAK_ROUTES_A_DC1"
 
       - name: B_DC1
         vrf_vni: 110

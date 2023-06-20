@@ -383,24 +383,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-- name: RM_LEAK_ROUTES_C_DC1
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_C_DC1
-- name: RM_LEAK_ROUTES_B_DC1
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_B_DC1
-- name: RM_LEAK_ROUTES_A_DC1
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix_list PL_LEAK_ROUTES_A_DC1
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -417,18 +399,6 @@ prefix_lists:
     action: permit 1.1.1.0/27 eq 32
   - sequence: 20
     action: permit 2.2.2.0/27 eq 32
-- name: PL_LEAK_ROUTES_C_DC1
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.120.0.0/24
-- name: PL_LEAK_ROUTES_B_DC1
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.110.0.0/24
-- name: PL_LEAK_ROUTES_A_DC1
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.100.0.0/24
 router_bfd:
   multihop:
     interval: 1200
@@ -437,11 +407,6 @@ router_bfd:
 ip_igmp_snooping:
   globally_enabled: true
 ip_virtual_router_mac_address: 00:1c:73:00:00:10
-eos_cli: 'route-target export evpn route-map RM_LEAK_ROUTES_A_DC1
-
-  route-target export evpn route-map RM_LEAK_ROUTES_B_DC1
-
-  route-target export evpn route-map RM_LEAK_ROUTES_C_DC1'
 vxlan_interface:
   Vxlan1:
     description: dc1-leaf1a_VTEP

@@ -795,24 +795,6 @@ router bfd
 | 10 | permit 3.3.3.0/27 eq 32 |
 | 20 | permit 4.4.4.0/27 eq 32 |
 
-##### PL_LEAK_ROUTES_A_DC2
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.200.0.0/24 |
-
-##### PL_LEAK_ROUTES_B_DC2
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.210.0.0/24 |
-
-##### PL_LEAK_ROUTES_C_DC2
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.220.0.0/24 |
-
 #### Prefix-lists Device Configuration
 
 ```eos
@@ -820,15 +802,6 @@ router bfd
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 3.3.3.0/27 eq 32
    seq 20 permit 4.4.4.0/27 eq 32
-!
-ip prefix-list PL_LEAK_ROUTES_A_DC2
-   seq 10 permit 10.200.0.0/24
-!
-ip prefix-list PL_LEAK_ROUTES_B_DC2
-   seq 10 permit 10.210.0.0/24
-!
-ip prefix-list PL_LEAK_ROUTES_C_DC2
-   seq 10 permit 10.220.0.0/24
 ```
 
 ### Route-maps
@@ -847,24 +820,6 @@ ip prefix-list PL_LEAK_ROUTES_C_DC2
 | -------- | ---- | ----- | --- | ------------- | -------- |
 | 10 | permit | - | origin incomplete | - | - |
 
-##### RM_LEAK_ROUTES_A_DC2
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_A_DC2 | - | - | - |
-
-##### RM_LEAK_ROUTES_B_DC2
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_B_DC2 | - | - | - |
-
-##### RM_LEAK_ROUTES_C_DC2
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_C_DC2 | - | - | - |
-
 #### Route-maps Device Configuration
 
 ```eos
@@ -875,15 +830,6 @@ route-map RM-CONN-2-BGP permit 10
 route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
-!
-route-map RM_LEAK_ROUTES_A_DC2 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_A_DC2
-!
-route-map RM_LEAK_ROUTES_B_DC2 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_B_DC2
-!
-route-map RM_LEAK_ROUTES_C_DC2 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_C_DC2
 ```
 
 ## VRF Instances

@@ -44,7 +44,6 @@
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
-- [EOS CLI](#eos-cli)
 
 ## Management
 
@@ -888,13 +887,4 @@ vrf instance B_DC1
 vrf instance C_DC1
 !
 vrf instance MGMT
-```
-
-## EOS CLI
-
-```eos
-!
-route-target export evpn route-map RM_LEAK_ROUTES_A_DC1
-route-target export evpn route-map RM_LEAK_ROUTES_B_DC1
-route-target export evpn route-map RM_LEAK_ROUTES_C_DC1
 ```

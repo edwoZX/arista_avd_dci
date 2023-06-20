@@ -44,7 +44,6 @@
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
-- [EOS CLI](#eos-cli)
 
 ## Management
 
@@ -800,24 +799,6 @@ router bfd
 | 10 | permit 1.1.1.0/27 eq 32 |
 | 20 | permit 2.2.2.0/27 eq 32 |
 
-##### PL_LEAK_ROUTES_A_DC1
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.100.0.0/24 |
-
-##### PL_LEAK_ROUTES_B_DC1
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.110.0.0/24 |
-
-##### PL_LEAK_ROUTES_C_DC1
-
-| Sequence | Action |
-| -------- | ------ |
-| 10 | permit 10.120.0.0/24 |
-
 #### Prefix-lists Device Configuration
 
 ```eos
@@ -825,15 +806,6 @@ router bfd
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 1.1.1.0/27 eq 32
    seq 20 permit 2.2.2.0/27 eq 32
-!
-ip prefix-list PL_LEAK_ROUTES_A_DC1
-   seq 10 permit 10.100.0.0/24
-!
-ip prefix-list PL_LEAK_ROUTES_B_DC1
-   seq 10 permit 10.110.0.0/24
-!
-ip prefix-list PL_LEAK_ROUTES_C_DC1
-   seq 10 permit 10.120.0.0/24
 ```
 
 ### Route-maps
@@ -852,24 +824,6 @@ ip prefix-list PL_LEAK_ROUTES_C_DC1
 | -------- | ---- | ----- | --- | ------------- | -------- |
 | 10 | permit | - | origin incomplete | - | - |
 
-##### RM_LEAK_ROUTES_A_DC1
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_A_DC1 | - | - | - |
-
-##### RM_LEAK_ROUTES_B_DC1
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_B_DC1 | - | - | - |
-
-##### RM_LEAK_ROUTES_C_DC1
-
-| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
-| -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_C_DC1 | - | - | - |
-
 #### Route-maps Device Configuration
 
 ```eos
@@ -880,15 +834,6 @@ route-map RM-CONN-2-BGP permit 10
 route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
-!
-route-map RM_LEAK_ROUTES_A_DC1 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_A_DC1
-!
-route-map RM_LEAK_ROUTES_B_DC1 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_B_DC1
-!
-route-map RM_LEAK_ROUTES_C_DC1 permit 10
-   match ip address prefix_list PL_LEAK_ROUTES_C_DC1
 ```
 
 ## VRF Instances
@@ -913,13 +858,4 @@ vrf instance B_DC1
 vrf instance C_DC1
 !
 vrf instance MGMT
-```
-
-## EOS CLI
-
-```eos
-!
-route-target export evpn route-map RM_LEAK_ROUTES_A_DC1
-route-target export evpn route-map RM_LEAK_ROUTES_B_DC1
-route-target export evpn route-map RM_LEAK_ROUTES_C_DC1
 ```
