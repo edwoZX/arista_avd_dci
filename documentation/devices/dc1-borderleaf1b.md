@@ -44,6 +44,7 @@
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
+- [EOS CLI](#eos-cli)
 
 ## Management
 
@@ -756,6 +757,7 @@ router bgp 65199
    vrf A_DC1
       rd 1.1.1.8:100
       route-target import evpn 100:100
+      route-target import evpn 120:120
       route-target export evpn 100:100
       router-id 1.1.1.8
       neighbor 10.254.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -764,6 +766,7 @@ router bgp 65199
    vrf B_DC1
       rd 1.1.1.8:110
       route-target import evpn 110:110
+      route-target import evpn 120:120
       route-target export evpn 110:110
       router-id 1.1.1.8
       neighbor 10.254.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -772,6 +775,8 @@ router bgp 65199
    vrf C_DC1
       rd 1.1.1.8:120
       route-target import evpn 120:120
+      route-target import evpn 100:100
+      route-target import evpn 110:110
       route-target export evpn 120:120
       router-id 1.1.1.8
       neighbor 10.254.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -883,4 +888,13 @@ vrf instance B_DC1
 vrf instance C_DC1
 !
 vrf instance MGMT
+```
+
+## EOS CLI
+
+```eos
+!
+route-target export evpn route-map RM_LEAK_ROUTES_A_DC1
+route-target export evpn route-map RM_LEAK_ROUTES_B_DC1
+route-target export evpn route-map RM_LEAK_ROUTES_C_DC1
 ```
