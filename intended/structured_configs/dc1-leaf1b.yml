@@ -68,17 +68,16 @@ router_bgp:
   vrfs:
   - name: A_DC1
     router_id: 1.1.1.4
-    rd: 1.1.1.4:10
+    rd: 1.1.1.4:100
     route_targets:
       import:
       - address_family: evpn
         route_targets:
-        - '10:10'
-        - '12:12'
+        - 100:100
       export:
       - address_family: evpn
         route_targets:
-        - '10:10'
+        - 100:100
     redistribute_routes:
     - source_protocol: connected
     neighbors:
@@ -86,17 +85,16 @@ router_bgp:
       peer_group: MLAG-IPv4-UNDERLAY-PEER
   - name: B_DC1
     router_id: 1.1.1.4
-    rd: 1.1.1.4:11
+    rd: 1.1.1.4:110
     route_targets:
       import:
       - address_family: evpn
         route_targets:
-        - '11:11'
-        - '12:12'
+        - 110:110
       export:
       - address_family: evpn
         route_targets:
-        - '11:11'
+        - 110:110
     redistribute_routes:
     - source_protocol: connected
     neighbors:
@@ -104,18 +102,16 @@ router_bgp:
       peer_group: MLAG-IPv4-UNDERLAY-PEER
   - name: C_DC1
     router_id: 1.1.1.4
-    rd: 1.1.1.4:12
+    rd: 1.1.1.4:120
     route_targets:
       import:
       - address_family: evpn
         route_targets:
-        - '12:12'
-        - '10:10'
-        - '11:11'
+        - 120:120
       export:
       - address_family: evpn
         route_targets:
-        - '12:12'
+        - 120:120
     redistribute_routes:
     - source_protocol: connected
     neighbors:
@@ -220,7 +216,7 @@ vlans:
 - id: 100
   name: A_DC1_VLAN100
   tenant: TENANT_DC1
-- id: 3009
+- id: 3099
   name: MLAG_iBGP_A_DC1
   trunk_groups:
   - LEAF_PEER_L3
@@ -228,7 +224,7 @@ vlans:
 - id: 110
   name: B_DC1_VLAN110
   tenant: TENANT_DC1
-- id: 3010
+- id: 3109
   name: MLAG_iBGP_B_DC1
   trunk_groups:
   - LEAF_PEER_L3
@@ -236,7 +232,7 @@ vlans:
 - id: 120
   name: C_DC1_VLAN120
   tenant: TENANT_DC1
-- id: 3011
+- id: 3119
   name: MLAG_iBGP_C_DC1
   trunk_groups:
   - LEAF_PEER_L3
@@ -259,7 +255,7 @@ vlan_interfaces:
   shutdown: false
   ip_address_virtual: 10.100.0.1/24
   vrf: A_DC1
-- name: Vlan3009
+- name: Vlan3099
   tenant: TENANT_DC1
   type: underlay_peering
   shutdown: false
@@ -273,7 +269,7 @@ vlan_interfaces:
   shutdown: false
   ip_address_virtual: 10.110.0.1/24
   vrf: B_DC1
-- name: Vlan3010
+- name: Vlan3109
   tenant: TENANT_DC1
   type: underlay_peering
   shutdown: false
@@ -287,7 +283,7 @@ vlan_interfaces:
   shutdown: false
   ip_address_virtual: 10.120.0.1/24
   vrf: C_DC1
-- name: Vlan3011
+- name: Vlan3119
   tenant: TENANT_DC1
   type: underlay_peering
   shutdown: false
@@ -383,6 +379,24 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM_LEAK_ROUTES_C_DC1
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix_list PL_LEAK_ROUTES_C_DC1
+- name: RM_LEAK_ROUTES_B_DC1
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix_list PL_LEAK_ROUTES_B_DC1
+- name: RM_LEAK_ROUTES_A_DC1
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix_list PL_LEAK_ROUTES_A_DC1
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -392,21 +406,6 @@ loopback_interfaces:
   description: VTEP_VXLAN_Tunnel_Source
   shutdown: false
   ip_address: 2.2.2.3/32
-- name: Loopback10
-  description: A_DC1_VTEP_DIAGNOSTICS
-  shutdown: false
-  vrf: A_DC1
-  ip_address: 10.254.10.4/32
-- name: Loopback11
-  description: B_DC1_VTEP_DIAGNOSTICS
-  shutdown: false
-  vrf: B_DC1
-  ip_address: 10.254.11.4/32
-- name: Loopback12
-  description: C_DC1_VTEP_DIAGNOSTICS
-  shutdown: false
-  vrf: C_DC1
-  ip_address: 10.254.12.4/32
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -414,6 +413,18 @@ prefix_lists:
     action: permit 1.1.1.0/27 eq 32
   - sequence: 20
     action: permit 2.2.2.0/27 eq 32
+- name: PL_LEAK_ROUTES_C_DC1
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.120.0.0/24
+- name: PL_LEAK_ROUTES_B_DC1
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.110.0.0/24
+- name: PL_LEAK_ROUTES_A_DC1
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.100.0.0/24
 router_bfd:
   multihop:
     interval: 1200
@@ -438,15 +449,8 @@ vxlan_interface:
         vni: 10120
       vrfs:
       - name: A_DC1
-        vni: 10
+        vni: 100
       - name: B_DC1
-        vni: 11
+        vni: 110
       - name: C_DC1
-        vni: 12
-virtual_source_nat_vrfs:
-- name: A_DC1
-  ip_address: 10.254.10.4
-- name: B_DC1
-  ip_address: 10.254.11.4
-- name: C_DC1
-  ip_address: 10.254.12.4
+        vni: 120

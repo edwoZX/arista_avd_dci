@@ -9,15 +9,9 @@ tenants:
       # VRF definitions inside the tenant.
       - name: A_DC1
         # VRF VNI definition.
-        vrf_vni: 10
+        vrf_vni: 100
         # Enable VTEP Network diagnostics
         # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
-        vtep_diagnostic:
-          # Loopback interface number
-          loopback: 10
-          # Loopback ip range, a unique ip is derived from this ranged and assigned
-          # to each l3 leaf based on it's unique id.
-          loopback_ip_range: 10.254.10.0/27
         svis:
           # SVI definitions.
           - id: 100
@@ -27,32 +21,26 @@ tenants:
             # IP anycast gateway to be used in the SVI in every leaf.
             ip_address_virtual: 10.100.0.1/24
         #Used for VRF leaking, importing routes from VRF C_DC1
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "12:12"
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "12:12"
 
       - name: B_DC1
-        vrf_vni: 11
-        vtep_diagnostic:
-          loopback: 11
-          loopback_ip_range: 10.254.11.0/27
+        vrf_vni: 110
         svis:
           - id: 110
             name: B_DC1_VLAN110
             enabled: true
             ip_address_virtual: 10.110.0.1/24
         #Used for VRF leaking, importing routes from VRF C_DC1
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "12:12"
-
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "12:12"
+#
       - name: C_DC1
-        vrf_vni: 12
-        vtep_diagnostic:
-          loopback: 12
-          loopback_ip_range: 10.254.12.0/27
+        vrf_vni: 120
         svis:
           - id: 120
             name: C_DC1_VLAN120
@@ -60,11 +48,11 @@ tenants:
             ip_address_virtual: 10.120.0.1/24
         # Used for VRF leaking, importing routes from VRF A_DC1 and B_DC1
         # WOULD THIS IMPORT FROM DC1 AS WELL..?
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "10:10"
-          - type: import
-            address_family: evpn
-            route_target: "11:11"
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "10:10"
+#          - type: import
+#            address_family: evpn
+#            route_target: "11:11"
 

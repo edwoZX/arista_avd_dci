@@ -9,15 +9,7 @@ tenants:
       # VRF definitions inside the tenant.
       - name: A_DC2
         # VRF VNI definition. The same as in DC1 since this VRF is leaked.
-        vrf_vni: 10
-        # Enable VTEP Network diagnostics
-        # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
-        vtep_diagnostic:
-          # Loopback interface number
-          loopback: 10
-          # Loopback ip range, a unique ip is derived from this ranged and assigned
-          # to each l3 leaf based on it's unique id.
-          loopback_ip_range: 10.255.10.0/27
+        vrf_vni: 100
         svis:
           # SVI definitions.
           - id: 200
@@ -27,33 +19,27 @@ tenants:
             # IP anycast gateway to be used in the SVI in every leaf.
             ip_address_virtual: 10.200.0.1/24
         #Used for VRF leaking, importing routes from VRF C_DC2
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "22:22"
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "22:22"
 
       - name: B_DC2
-        vrf_vni: 11
-        vtep_diagnostic:
-          loopback: 11
-          loopback_ip_range: 10.255.11.0/27
+        vrf_vni: 110
         svis:
           - id: 210
             name: B_DC2_VLAN210
             enabled: true
             ip_address_virtual: 10.210.0.1/24
         #Used for VRF leaking, importing routes from VRF C_DC2
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "22:22"
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "22:22"
 
       - name: C_DC2
         # VRF VNI definition. Differrent to DC1, this VRF is not leaked between DCs.
-        vrf_vni: 22
-        vtep_diagnostic:
-          loopback: 12
-          loopback_ip_range: 10.255.12.0/27
+        vrf_vni: 220
         svis:
           - id: 220
             name: C_DC2_VLAN220
@@ -61,10 +47,10 @@ tenants:
             ip_address_virtual: 10.220.0.1/24
         # Used for VRF leaking, importing routes from VRF A_DC2 and B_DC2
         # WOULD THIS IMPORT FROM DC1 AS WELL..?
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "10:10"           
-          - type: import
-            address_family: evpn
-            route_target: "11:11"
+#        additional_route_targets:
+#          - type: import
+#            address_family: evpn
+#            route_target: "10:10"           
+#          - type: import
+#            address_family: evpn
+#            route_target: "11:11"

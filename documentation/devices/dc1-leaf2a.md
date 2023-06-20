@@ -44,9 +44,6 @@
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
-- [Virtual Source NAT](#virtual-source-nat)
-  - [Virtual Source NAT Summary](#virtual-source-nat-summary)
-  - [Virtual Source NAT Configuration](#virtual-source-nat-configuration)
 
 ## Management
 
@@ -213,9 +210,9 @@ vlan internal order ascending range 1006 1199
 | 100 | A_DC1_VLAN100 | - |
 | 110 | B_DC1_VLAN110 | - |
 | 120 | C_DC1_VLAN120 | - |
-| 3009 | MLAG_iBGP_A_DC1 | LEAF_PEER_L3 |
-| 3010 | MLAG_iBGP_B_DC1 | LEAF_PEER_L3 |
-| 3011 | MLAG_iBGP_C_DC1 | LEAF_PEER_L3 |
+| 3099 | MLAG_iBGP_A_DC1 | LEAF_PEER_L3 |
+| 3109 | MLAG_iBGP_B_DC1 | LEAF_PEER_L3 |
+| 3119 | MLAG_iBGP_C_DC1 | LEAF_PEER_L3 |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3 |
 | 4094 | MLAG_PEER | MLAG |
 
@@ -232,15 +229,15 @@ vlan 110
 vlan 120
    name C_DC1_VLAN120
 !
-vlan 3009
+vlan 3099
    name MLAG_iBGP_A_DC1
    trunk group LEAF_PEER_L3
 !
-vlan 3010
+vlan 3109
    name MLAG_iBGP_B_DC1
    trunk group LEAF_PEER_L3
 !
-vlan 3011
+vlan 3119
    name MLAG_iBGP_C_DC1
    trunk group LEAF_PEER_L3
 !
@@ -354,9 +351,6 @@ interface Port-Channel8
 | --------- | ----------- | --- | ---------- |
 | Loopback0 | EVPN_Overlay_Peering | default | 1.1.1.5/32 |
 | Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 2.2.2.5/32 |
-| Loopback10 | A_DC1_VTEP_DIAGNOSTICS | A_DC1 | 10.254.10.5/32 |
-| Loopback11 | B_DC1_VTEP_DIAGNOSTICS | B_DC1 | 10.254.11.5/32 |
-| Loopback12 | C_DC1_VTEP_DIAGNOSTICS | C_DC1 | 10.254.12.5/32 |
 
 ##### IPv6
 
@@ -364,9 +358,6 @@ interface Port-Channel8
 | --------- | ----------- | --- | ------------ |
 | Loopback0 | EVPN_Overlay_Peering | default | - |
 | Loopback1 | VTEP_VXLAN_Tunnel_Source | default | - |
-| Loopback10 | A_DC1_VTEP_DIAGNOSTICS | A_DC1 | - |
-| Loopback11 | B_DC1_VTEP_DIAGNOSTICS | B_DC1 | - |
-| Loopback12 | C_DC1_VTEP_DIAGNOSTICS | C_DC1 | - |
 
 
 #### Loopback Interfaces Device Configuration
@@ -382,24 +373,6 @@ interface Loopback1
    description VTEP_VXLAN_Tunnel_Source
    no shutdown
    ip address 2.2.2.5/32
-!
-interface Loopback10
-   description A_DC1_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf A_DC1
-   ip address 10.254.10.5/32
-!
-interface Loopback11
-   description B_DC1_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf B_DC1
-   ip address 10.254.11.5/32
-!
-interface Loopback12
-   description C_DC1_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf C_DC1
-   ip address 10.254.12.5/32
 ```
 
 ### VLAN Interfaces
@@ -411,9 +384,9 @@ interface Loopback12
 | Vlan100 | A_DC1_VLAN100 | A_DC1 | - | False |
 | Vlan110 | B_DC1_VLAN110 | B_DC1 | - | False |
 | Vlan120 | C_DC1_VLAN120 | C_DC1 | - | False |
-| Vlan3009 | MLAG_PEER_L3_iBGP: vrf A_DC1 | A_DC1 | 1500 | False |
-| Vlan3010 | MLAG_PEER_L3_iBGP: vrf B_DC1 | B_DC1 | 1500 | False |
-| Vlan3011 | MLAG_PEER_L3_iBGP: vrf C_DC1 | C_DC1 | 1500 | False |
+| Vlan3099 | MLAG_PEER_L3_iBGP: vrf A_DC1 | A_DC1 | 1500 | False |
+| Vlan3109 | MLAG_PEER_L3_iBGP: vrf B_DC1 | B_DC1 | 1500 | False |
+| Vlan3119 | MLAG_PEER_L3_iBGP: vrf C_DC1 | C_DC1 | 1500 | False |
 | Vlan4093 | MLAG_PEER_L3_PEERING | default | 1500 | False |
 | Vlan4094 | MLAG_PEER | default | 1500 | False |
 
@@ -424,9 +397,9 @@ interface Loopback12
 | Vlan100 |  A_DC1  |  -  |  10.100.0.1/24  |  -  |  -  |  -  |  -  |
 | Vlan110 |  B_DC1  |  -  |  10.110.0.1/24  |  -  |  -  |  -  |  -  |
 | Vlan120 |  C_DC1  |  -  |  10.120.0.1/24  |  -  |  -  |  -  |  -  |
-| Vlan3009 |  A_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3010 |  B_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3011 |  C_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3099 |  A_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3109 |  B_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3119 |  C_DC1  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.254.2.4/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.254.1.4/31  |  -  |  -  |  -  |  -  |  -  |
 
@@ -452,21 +425,21 @@ interface Vlan120
    vrf C_DC1
    ip address virtual 10.120.0.1/24
 !
-interface Vlan3009
+interface Vlan3099
    description MLAG_PEER_L3_iBGP: vrf A_DC1
    no shutdown
    mtu 1500
    vrf A_DC1
    ip address 10.254.2.4/31
 !
-interface Vlan3010
+interface Vlan3109
    description MLAG_PEER_L3_iBGP: vrf B_DC1
    no shutdown
    mtu 1500
    vrf B_DC1
    ip address 10.254.2.4/31
 !
-interface Vlan3011
+interface Vlan3119
    description MLAG_PEER_L3_iBGP: vrf C_DC1
    no shutdown
    mtu 1500
@@ -509,9 +482,9 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| A_DC1 | 10 | - |
-| B_DC1 | 11 | - |
-| C_DC1 | 12 | - |
+| A_DC1 | 100 | - |
+| B_DC1 | 110 | - |
+| C_DC1 | 120 | - |
 
 #### VXLAN Interface Device Configuration
 
@@ -525,9 +498,9 @@ interface Vxlan1
    vxlan vlan 100 vni 10100
    vxlan vlan 110 vni 10110
    vxlan vlan 120 vni 10120
-   vxlan vrf A_DC1 vni 10
-   vxlan vrf B_DC1 vni 11
-   vxlan vrf C_DC1 vni 12
+   vxlan vrf A_DC1 vni 100
+   vxlan vrf B_DC1 vni 110
+   vxlan vrf C_DC1 vni 120
 ```
 
 ## Routing
@@ -681,9 +654,9 @@ ip route vrf MGMT 0.0.0.0/0 192.168.1.254
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| A_DC1 | 1.1.1.5:10 | connected |
-| B_DC1 | 1.1.1.5:11 | connected |
-| C_DC1 | 1.1.1.5:12 | connected |
+| A_DC1 | 1.1.1.5:100 | connected |
+| B_DC1 | 1.1.1.5:110 | connected |
+| C_DC1 | 1.1.1.5:120 | connected |
 
 #### Router BGP Device Configuration
 
@@ -752,29 +725,25 @@ router bgp 65102
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    vrf A_DC1
-      rd 1.1.1.5:10
-      route-target import evpn 10:10
-      route-target import evpn 12:12
-      route-target export evpn 10:10
+      rd 1.1.1.5:100
+      route-target import evpn 100:100
+      route-target export evpn 100:100
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf B_DC1
-      rd 1.1.1.5:11
-      route-target import evpn 11:11
-      route-target import evpn 12:12
-      route-target export evpn 11:11
+      rd 1.1.1.5:110
+      route-target import evpn 110:110
+      route-target export evpn 110:110
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf C_DC1
-      rd 1.1.1.5:12
-      route-target import evpn 12:12
-      route-target import evpn 10:10
-      route-target import evpn 11:11
-      route-target export evpn 12:12
+      rd 1.1.1.5:120
+      route-target import evpn 120:120
+      route-target export evpn 120:120
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
@@ -826,6 +795,24 @@ router bfd
 | 10 | permit 1.1.1.0/27 eq 32 |
 | 20 | permit 2.2.2.0/27 eq 32 |
 
+##### PL_LEAK_ROUTES_A_DC1
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 10.100.0.0/24 |
+
+##### PL_LEAK_ROUTES_B_DC1
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 10.110.0.0/24 |
+
+##### PL_LEAK_ROUTES_C_DC1
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 10.120.0.0/24 |
+
 #### Prefix-lists Device Configuration
 
 ```eos
@@ -833,6 +820,15 @@ router bfd
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 1.1.1.0/27 eq 32
    seq 20 permit 2.2.2.0/27 eq 32
+!
+ip prefix-list PL_LEAK_ROUTES_A_DC1
+   seq 10 permit 10.100.0.0/24
+!
+ip prefix-list PL_LEAK_ROUTES_B_DC1
+   seq 10 permit 10.110.0.0/24
+!
+ip prefix-list PL_LEAK_ROUTES_C_DC1
+   seq 10 permit 10.120.0.0/24
 ```
 
 ### Route-maps
@@ -851,6 +847,24 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 | -------- | ---- | ----- | --- | ------------- | -------- |
 | 10 | permit | - | origin incomplete | - | - |
 
+##### RM_LEAK_ROUTES_A_DC1
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_A_DC1 | - | - | - |
+
+##### RM_LEAK_ROUTES_B_DC1
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_B_DC1 | - | - | - |
+
+##### RM_LEAK_ROUTES_C_DC1
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix_list PL_LEAK_ROUTES_C_DC1 | - | - | - |
+
 #### Route-maps Device Configuration
 
 ```eos
@@ -861,6 +875,15 @@ route-map RM-CONN-2-BGP permit 10
 route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
+!
+route-map RM_LEAK_ROUTES_A_DC1 permit 10
+   match ip address prefix_list PL_LEAK_ROUTES_A_DC1
+!
+route-map RM_LEAK_ROUTES_B_DC1 permit 10
+   match ip address prefix_list PL_LEAK_ROUTES_B_DC1
+!
+route-map RM_LEAK_ROUTES_C_DC1 permit 10
+   match ip address prefix_list PL_LEAK_ROUTES_C_DC1
 ```
 
 ## VRF Instances
@@ -885,23 +908,4 @@ vrf instance B_DC1
 vrf instance C_DC1
 !
 vrf instance MGMT
-```
-
-## Virtual Source NAT
-
-### Virtual Source NAT Summary
-
-| Source NAT VRF | Source NAT IP Address |
-| -------------- | --------------------- |
-| A_DC1 | 10.254.10.5 |
-| B_DC1 | 10.254.11.5 |
-| C_DC1 | 10.254.12.5 |
-
-### Virtual Source NAT Configuration
-
-```eos
-!
-ip address virtual source-nat vrf A_DC1 address 10.254.10.5
-ip address virtual source-nat vrf B_DC1 address 10.254.11.5
-ip address virtual source-nat vrf C_DC1 address 10.254.12.5
 ```

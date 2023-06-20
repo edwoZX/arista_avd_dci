@@ -44,9 +44,6 @@
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
-- [Virtual Source NAT](#virtual-source-nat)
-  - [Virtual Source NAT Summary](#virtual-source-nat-summary)
-  - [Virtual Source NAT Configuration](#virtual-source-nat-configuration)
 
 ## Management
 
@@ -213,9 +210,9 @@ vlan internal order ascending range 1006 1199
 | 200 | A_DC2_VLAN200 | - |
 | 210 | B_DC2_VLAN210 | - |
 | 220 | C_DC2_VLAN220 | - |
-| 3009 | MLAG_iBGP_A_DC2 | LEAF_PEER_L3 |
-| 3010 | MLAG_iBGP_B_DC2 | LEAF_PEER_L3 |
-| 3021 | MLAG_iBGP_C_DC2 | LEAF_PEER_L3 |
+| 3099 | MLAG_iBGP_A_DC2 | LEAF_PEER_L3 |
+| 3109 | MLAG_iBGP_B_DC2 | LEAF_PEER_L3 |
+| 3219 | MLAG_iBGP_C_DC2 | LEAF_PEER_L3 |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3 |
 | 4094 | MLAG_PEER | MLAG |
 
@@ -232,15 +229,15 @@ vlan 210
 vlan 220
    name C_DC2_VLAN220
 !
-vlan 3009
+vlan 3099
    name MLAG_iBGP_A_DC2
    trunk group LEAF_PEER_L3
 !
-vlan 3010
+vlan 3109
    name MLAG_iBGP_B_DC2
    trunk group LEAF_PEER_L3
 !
-vlan 3021
+vlan 3219
    name MLAG_iBGP_C_DC2
    trunk group LEAF_PEER_L3
 !
@@ -345,9 +342,6 @@ interface Port-Channel3
 | --------- | ----------- | --- | ---------- |
 | Loopback0 | EVPN_Overlay_Peering | default | 3.3.3.8/32 |
 | Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 4.4.4.7/32 |
-| Loopback10 | A_DC2_VTEP_DIAGNOSTICS | A_DC2 | 10.255.10.8/32 |
-| Loopback11 | B_DC2_VTEP_DIAGNOSTICS | B_DC2 | 10.255.11.8/32 |
-| Loopback12 | C_DC2_VTEP_DIAGNOSTICS | C_DC2 | 10.255.12.8/32 |
 
 ##### IPv6
 
@@ -355,9 +349,6 @@ interface Port-Channel3
 | --------- | ----------- | --- | ------------ |
 | Loopback0 | EVPN_Overlay_Peering | default | - |
 | Loopback1 | VTEP_VXLAN_Tunnel_Source | default | - |
-| Loopback10 | A_DC2_VTEP_DIAGNOSTICS | A_DC2 | - |
-| Loopback11 | B_DC2_VTEP_DIAGNOSTICS | B_DC2 | - |
-| Loopback12 | C_DC2_VTEP_DIAGNOSTICS | C_DC2 | - |
 
 
 #### Loopback Interfaces Device Configuration
@@ -373,24 +364,6 @@ interface Loopback1
    description VTEP_VXLAN_Tunnel_Source
    no shutdown
    ip address 4.4.4.7/32
-!
-interface Loopback10
-   description A_DC2_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf A_DC2
-   ip address 10.255.10.8/32
-!
-interface Loopback11
-   description B_DC2_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf B_DC2
-   ip address 10.255.11.8/32
-!
-interface Loopback12
-   description C_DC2_VTEP_DIAGNOSTICS
-   no shutdown
-   vrf C_DC2
-   ip address 10.255.12.8/32
 ```
 
 ### VLAN Interfaces
@@ -402,9 +375,9 @@ interface Loopback12
 | Vlan200 | A_DC2_VLAN200 | A_DC2 | - | False |
 | Vlan210 | B_DC2_VLAN210 | B_DC2 | - | False |
 | Vlan220 | C_DC2_VLAN220 | C_DC2 | - | False |
-| Vlan3009 | MLAG_PEER_L3_iBGP: vrf A_DC2 | A_DC2 | 1500 | False |
-| Vlan3010 | MLAG_PEER_L3_iBGP: vrf B_DC2 | B_DC2 | 1500 | False |
-| Vlan3021 | MLAG_PEER_L3_iBGP: vrf C_DC2 | C_DC2 | 1500 | False |
+| Vlan3099 | MLAG_PEER_L3_iBGP: vrf A_DC2 | A_DC2 | 1500 | False |
+| Vlan3109 | MLAG_PEER_L3_iBGP: vrf B_DC2 | B_DC2 | 1500 | False |
+| Vlan3219 | MLAG_PEER_L3_iBGP: vrf C_DC2 | C_DC2 | 1500 | False |
 | Vlan4093 | MLAG_PEER_L3_PEERING | default | 1500 | False |
 | Vlan4094 | MLAG_PEER | default | 1500 | False |
 
@@ -415,9 +388,9 @@ interface Loopback12
 | Vlan200 |  A_DC2  |  -  |  10.200.0.1/24  |  -  |  -  |  -  |  -  |
 | Vlan210 |  B_DC2  |  -  |  10.210.0.1/24  |  -  |  -  |  -  |  -  |
 | Vlan220 |  C_DC2  |  -  |  10.220.0.1/24  |  -  |  -  |  -  |  -  |
-| Vlan3009 |  A_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3010 |  B_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan3021 |  C_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3099 |  A_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3109 |  B_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan3219 |  C_DC2  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.255.2.9/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.255.1.9/31  |  -  |  -  |  -  |  -  |  -  |
 
@@ -443,21 +416,21 @@ interface Vlan220
    vrf C_DC2
    ip address virtual 10.220.0.1/24
 !
-interface Vlan3009
+interface Vlan3099
    description MLAG_PEER_L3_iBGP: vrf A_DC2
    no shutdown
    mtu 1500
    vrf A_DC2
    ip address 10.255.2.9/31
 !
-interface Vlan3010
+interface Vlan3109
    description MLAG_PEER_L3_iBGP: vrf B_DC2
    no shutdown
    mtu 1500
    vrf B_DC2
    ip address 10.255.2.9/31
 !
-interface Vlan3021
+interface Vlan3219
    description MLAG_PEER_L3_iBGP: vrf C_DC2
    no shutdown
    mtu 1500
@@ -500,9 +473,9 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| A_DC2 | 10 | - |
-| B_DC2 | 11 | - |
-| C_DC2 | 22 | - |
+| A_DC2 | 100 | - |
+| B_DC2 | 110 | - |
+| C_DC2 | 220 | - |
 
 #### VXLAN Interface Device Configuration
 
@@ -516,9 +489,9 @@ interface Vxlan1
    vxlan vlan 200 vni 20200
    vxlan vlan 210 vni 20210
    vxlan vlan 220 vni 20220
-   vxlan vrf A_DC2 vni 10
-   vxlan vrf B_DC2 vni 11
-   vxlan vrf C_DC2 vni 22
+   vxlan vrf A_DC2 vni 100
+   vxlan vrf B_DC2 vni 110
+   vxlan vrf C_DC2 vni 220
 ```
 
 ## Routing
@@ -694,9 +667,9 @@ ip route vrf MGMT 0.0.0.0/0 192.168.1.254
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| A_DC2 | 3.3.3.8:10 | connected |
-| B_DC2 | 3.3.3.8:11 | connected |
-| C_DC2 | 3.3.3.8:22 | connected |
+| A_DC2 | 3.3.3.8:100 | connected |
+| B_DC2 | 3.3.3.8:110 | connected |
+| C_DC2 | 3.3.3.8:220 | connected |
 
 #### Router BGP Device Configuration
 
@@ -781,29 +754,25 @@ router bgp 65299
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    vrf A_DC2
-      rd 3.3.3.8:10
-      route-target import evpn 10:10
-      route-target import evpn 22:22
-      route-target export evpn 10:10
+      rd 3.3.3.8:100
+      route-target import evpn 100:100
+      route-target export evpn 100:100
       router-id 3.3.3.8
       neighbor 10.255.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf B_DC2
-      rd 3.3.3.8:11
-      route-target import evpn 11:11
-      route-target import evpn 22:22
-      route-target export evpn 11:11
+      rd 3.3.3.8:110
+      route-target import evpn 110:110
+      route-target export evpn 110:110
       router-id 3.3.3.8
       neighbor 10.255.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf C_DC2
-      rd 3.3.3.8:22
-      route-target import evpn 22:22
-      route-target import evpn 10:10
-      route-target import evpn 11:11
-      route-target export evpn 22:22
+      rd 3.3.3.8:220
+      route-target import evpn 220:220
+      route-target export evpn 220:220
       router-id 3.3.3.8
       neighbor 10.255.2.8 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
@@ -914,23 +883,4 @@ vrf instance B_DC2
 vrf instance C_DC2
 !
 vrf instance MGMT
-```
-
-## Virtual Source NAT
-
-### Virtual Source NAT Summary
-
-| Source NAT VRF | Source NAT IP Address |
-| -------------- | --------------------- |
-| A_DC2 | 10.255.10.8 |
-| B_DC2 | 10.255.11.8 |
-| C_DC2 | 10.255.12.8 |
-
-### Virtual Source NAT Configuration
-
-```eos
-!
-ip address virtual source-nat vrf A_DC2 address 10.255.10.8
-ip address virtual source-nat vrf B_DC2 address 10.255.11.8
-ip address virtual source-nat vrf C_DC2 address 10.255.12.8
 ```
