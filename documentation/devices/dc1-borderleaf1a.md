@@ -756,7 +756,6 @@ router bgp 65199
    vrf A_DC1
       rd 1.1.1.7:100
       route-target import evpn 100:100
-      route-target import evpn 120:120
       route-target export evpn 100:100
       router-id 1.1.1.7
       neighbor 10.254.2.9 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -765,7 +764,6 @@ router bgp 65199
    vrf B_DC1
       rd 1.1.1.7:110
       route-target import evpn 110:110
-      route-target import evpn 120:120
       route-target export evpn 110:110
       router-id 1.1.1.7
       neighbor 10.254.2.9 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -774,8 +772,6 @@ router bgp 65199
    vrf C_DC1
       rd 1.1.1.7:120
       route-target import evpn 120:120
-      route-target import evpn 100:100
-      route-target import evpn 110:110
       route-target export evpn 120:120
       router-id 1.1.1.7
       neighbor 10.254.2.9 peer group MLAG-IPv4-UNDERLAY-PEER

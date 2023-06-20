@@ -1,7 +1,6 @@
 ---
 
 # Custom prefix_lists and route-maps to filter the leaked routes on vrf C_DC1, using eos_cli_config role
-# input variables
 
 custom_structured_configuration_prefix_lists:
   - name: PL_LEAK_ROUTES_C_DC1
@@ -41,9 +40,6 @@ custom_structured_configuration_route_maps:
         match: 
           - ip address prefix-list PL_LEAK_ROUTES_A_DC1
 
-# Merging eos_cli custom structured config above to the eos_design role structured config. 
-# By default, the option append_rp is used (existing items with the same key-value updated, new items appended)
-
 # Configuring the VRF leaking using the VRF leak agent
 custom_structured_configuration_router_general:
   vrfs:
@@ -59,9 +55,9 @@ custom_structured_configuration_router_general:
       leak_routes:
         - source_vrf: A_DC1
           subscribe_policy: RM_LEAK_ROUTES_A_DC1
-    - name: C_DC1
-      leak_routes:
         - source_vrf: B_DC1
           subscribe_policy: RM_LEAK_ROUTES_B_DC1
 
+# Merging eos_cli custom structured config above to the eos_design role structured config. 
+# By default, the option append_rp is used (existing items with the same key-value updated, new items appended)
 custom_structured_configuration_list_merge:

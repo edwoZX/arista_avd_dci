@@ -33,6 +33,7 @@
   - [IP Routing](#ip-routing)
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
+  - [Router General](#router-general)
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
@@ -577,6 +578,38 @@ no ip routing vrf MGMT
 ip route vrf MGMT 0.0.0.0/0 192.168.1.254
 ```
 
+### Router General
+
+#### VRF Route leaking
+
+| VRF | Source VRF | Route Map Policy |
+|-----|------------|------------------|
+| A_DC1 | C_DC1 | RM_LEAK_ROUTES_C_DC1 |
+| B_DC1 | C_DC1 | RM_LEAK_ROUTES_C_DC1 |
+| C_DC1 | A_DC1 | RM_LEAK_ROUTES_A_DC1 |
+| C_DC1 | B_DC1 | RM_LEAK_ROUTES_B_DC1 |
+
+#### Router General configuration
+
+```eos
+!
+router general
+   vrf A_DC1
+      leak routes source-vrf C_DC1 subscribe-policy RM_LEAK_ROUTES_C_DC1
+      exit
+   !
+   vrf B_DC1
+      leak routes source-vrf C_DC1 subscribe-policy RM_LEAK_ROUTES_C_DC1
+      exit
+   !
+   vrf C_DC1
+      leak routes source-vrf A_DC1 subscribe-policy RM_LEAK_ROUTES_A_DC1
+      leak routes source-vrf B_DC1 subscribe-policy RM_LEAK_ROUTES_B_DC1
+      exit
+   !
+   exit
+```
+
 ### Router BGP
 
 #### Router BGP Summary
@@ -727,7 +760,6 @@ router bgp 65102
    vrf A_DC1
       rd 1.1.1.5:100
       route-target import evpn 100:100
-      route-target import evpn 120:120
       route-target export evpn 100:100
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -736,7 +768,6 @@ router bgp 65102
    vrf B_DC1
       rd 1.1.1.5:110
       route-target import evpn 110:110
-      route-target import evpn 120:120
       route-target export evpn 110:110
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER
@@ -745,8 +776,6 @@ router bgp 65102
    vrf C_DC1
       rd 1.1.1.5:120
       route-target import evpn 120:120
-      route-target import evpn 100:100
-      route-target import evpn 110:110
       route-target export evpn 120:120
       router-id 1.1.1.5
       neighbor 10.254.2.5 peer group MLAG-IPv4-UNDERLAY-PEER

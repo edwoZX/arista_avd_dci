@@ -1,41 +1,63 @@
-#---
-#
-## Custom prefix_lists and route-maps to filter the leaked routes on vrf C_DC1
-#
-#custom_structured_configuration_prefix_lists:
-#  - name: PL_LEAK_ROUTES_C_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        action: "permit 10.220.0.0/24"
-#
-#  - name: PL_LEAK_ROUTES_B_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        action: "permit 10.210.0.0/24"
-#
-#  - name: PL_LEAK_ROUTES_A_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        action: "permit 10.200.0.0/24"
-#
-#custom_structured_configuration_route_maps:
-#  - name: RM_LEAK_ROUTES_C_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        type: permit
-#        match: 
-#          - "ip address prefix_list PL_LEAK_ROUTES_C_DC2"
-#
-#  - name: RM_LEAK_ROUTES_B_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        type: permit
-#        match: 
-#          - "ip address prefix_list PL_LEAK_ROUTES_B_DC2"
-#
-#  - name: RM_LEAK_ROUTES_A_DC2
-#    sequence_numbers:
-#      - sequence: 10
-#        type: permit
-#        match: 
-#          - "ip address prefix_list PL_LEAK_ROUTES_A_DC2"
+---
+
+# Custom prefix_lists and route-maps to filter the leaked routes on vrf C_DC1, using eos_cli_config role
+
+custom_structured_configuration_prefix_lists:
+  - name: PL_LEAK_ROUTES_C_DC2
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.220.0.0/24
+
+  - name: PL_LEAK_ROUTES_B_DC2
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.210.0.0/24
+
+  - name: PL_LEAK_ROUTES_A_DC2
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.200.0.0/24
+
+custom_structured_configuration_route_maps:
+  - name: RM_LEAK_ROUTES_C_DC2
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match: 
+          - ip address prefix-list PL_LEAK_ROUTES_C_DC2
+
+  - name: RM_LEAK_ROUTES_B_DC2
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match: 
+          - ip address prefix-list PL_LEAK_ROUTES_B_DC2
+
+  - name: RM_LEAK_ROUTES_A_DC2
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match: 
+          - ip address prefix-list PL_LEAK_ROUTES_A_DC2
+
+# Configuring the VRF leaking using the VRF leak agent
+custom_structured_configuration_router_general:
+  vrfs:
+    - name: A_DC2
+      leak_routes:
+        - source_vrf: C_DC2
+          subscribe_policy: RM_LEAK_ROUTES_C_DC2
+    - name: B_DC2
+      leak_routes:
+        - source_vrf: C_DC2
+          subscribe_policy: RM_LEAK_ROUTES_C_DC2
+    - name: C_DC2
+      leak_routes:
+        - source_vrf: A_DC2
+          subscribe_policy: RM_LEAK_ROUTES_A_DC2
+        - source_vrf: B_DC2
+          subscribe_policy: RM_LEAK_ROUTES_B_DC2
+
+# Merging eos_cli custom structured config above to the eos_design role structured config. 
+# By default, the option append_rp is used (existing items with the same key-value updated, new items appended)
+custom_structured_configuration_list_merge:

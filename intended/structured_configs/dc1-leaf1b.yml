@@ -74,7 +74,6 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 100:100
-        - 120:120
       export:
       - address_family: evpn
         route_targets:
@@ -92,7 +91,6 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 110:110
-        - 120:120
       export:
       - address_family: evpn
         route_targets:
@@ -110,8 +108,6 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 120:120
-        - 100:100
-        - 110:110
       export:
       - address_family: evpn
         route_targets:
@@ -458,3 +454,19 @@ vxlan_interface:
         vni: 110
       - name: C_DC1
         vni: 120
+router_general:
+  vrfs:
+  - name: A_DC1
+    leak_routes:
+    - source_vrf: C_DC1
+      subscribe_policy: RM_LEAK_ROUTES_C_DC1
+  - name: B_DC1
+    leak_routes:
+    - source_vrf: C_DC1
+      subscribe_policy: RM_LEAK_ROUTES_C_DC1
+  - name: C_DC1
+    leak_routes:
+    - source_vrf: A_DC1
+      subscribe_policy: RM_LEAK_ROUTES_A_DC1
+    - source_vrf: B_DC1
+      subscribe_policy: RM_LEAK_ROUTES_B_DC1
