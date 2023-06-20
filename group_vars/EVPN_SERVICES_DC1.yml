@@ -20,12 +20,7 @@ tenants:
             enabled: true
             # IP anycast gateway to be used in the SVI in every leaf.
             ip_address_virtual: 10.100.0.1/24
-        #Used for VRF leaking, importing routes from VRF C_DC1
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "120:120"
-
+            
       - name: B_DC1
         vrf_vni: 110
         svis:
@@ -33,13 +28,7 @@ tenants:
             name: B_DC1_VLAN110
             enabled: true
             ip_address_virtual: 10.110.0.1/24
-        #Used for VRF leaking, importing routes from VRF C_DC1
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "120:120"
-        
-#
+
       - name: C_DC1
         vrf_vni: 120
         svis:
@@ -47,14 +36,6 @@ tenants:
             name: C_DC1_VLAN120
             enabled: true
             ip_address_virtual: 10.120.0.1/24
-        # Used for VRF leaking, importing routes from VRF A_DC1 and B_DC1
-        # WOULD THIS IMPORT FROM DC1 AS WELL..?
-        additional_route_targets:
-          - type: import
-            address_family: evpn
-            route_target: "100:100"
-          - type: import
-            address_family: evpn
-            route_target: "110:110"
+
         
 
